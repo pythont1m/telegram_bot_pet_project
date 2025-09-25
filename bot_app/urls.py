@@ -5,5 +5,6 @@ urlpatterns = [
     path('api/', include('tg_bot.urls')),
     path('admin/', admin.site.urls),
 
+
 ]
 

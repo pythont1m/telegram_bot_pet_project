@@ -39,3 +39,15 @@ def save_search(request):
         serializer.save()
         return Response({'status': 'ok'})
     return Response(serializer.errors, status=400)
+
+@api_view(['GET'])
+def search_history(request):
+    user_id = request.GET.get('user_id')
+    if not user_id:
+        return Response({"error": "user_id required"}, status=400)
+    try:
+        history = SearchHistory.objects.filter(user__telegram_id=user_id).order_by('-timestamp')
+        serializer = SearchHistorySerializer(history, many=True)
+        return Response(serializer.data)
+    except TelegramUser.DoesNotExist:
+        return Response([], status=200)
