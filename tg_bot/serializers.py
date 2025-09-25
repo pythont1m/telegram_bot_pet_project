@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from bot_project.flights.models import Flight, SearchHistory
-from bot_project.users.models import TelegramUser
+from flights.models import Flight, SearchHistory
+from users.models import TelegramUser
 
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:

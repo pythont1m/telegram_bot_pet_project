@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from amadeus import Client
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -7,7 +8,12 @@ SECRET_KEY = 'django-insecure-l^zuq%-#^84io(1)fsb1#1k0&=st)s$*ot9hxc=&f*@q2n$pc=
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+amadeus = Client(
+    client_id=os.getenv('AMADEUS_API_KEY'),
+    client_secret=os.getenv("AMADEUS_API_SECRET")
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,7 +24,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'flights',
-    'tg_bot_app',
+    'tg_bot',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -87,3 +95,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+}
+

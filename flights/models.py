@@ -1,5 +1,5 @@
 from django.db import models
-from bot_project.users.models import TelegramUser
+from users.models import TelegramUser
 
 class Flight(models.Model):
     flight_id = models.CharField(max_length=50)
