@@ -17,7 +17,7 @@ async def ensure_user(update: Update):
             "telegram_id": update.effective_user.id,
             "username": update.effective_user.username or ""
         })
-        # Some APIs might return existing user or create new one
+
         return update.effective_user.id
     except Exception as e:
         print(f"⚠️ Could not ensure user: {e}")
@@ -55,7 +55,6 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("No flights found 😢")
             return
 
-        # Save search history
         try:
             requests.post(SAVE_HISTORY_URL, json={
                 "user": user_id,
@@ -66,7 +65,6 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             print(f"⚠️ Failed to save history: {e}")
 
-        # Process flight data
         flight_data = []
         for f in flights:
             try:
@@ -112,7 +110,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"Something went wrong: {e}")
 
-# Setup bot
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("search", search))

@@ -34,11 +34,27 @@ def flight_list(request):
 
 @api_view(['POST'])
 def save_search(request):
-    serializer = SearchHistorySerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'status': 'ok'})
-    return Response(serializer.errors, status=400)
+    telegram_id = request.data.get("user")
+    from_city = request.data.get("from_city")
+    to_city = request.data.get("to_city")
+    date = request.data.get("date")
+
+    if not telegram_id:
+        return Response({"error": "user (telegram_id) is required"}, status=400)
+
+    user, _ = TelegramUser.objects.get_or_create(
+        telegram_id=telegram_id,
+        defaults={"username": request.data.get("username", "")}
+    )
+
+    search = SearchHistory.objects.create(
+        user=user,
+        from_city=from_city,
+        to_city=to_city,
+        date=date
+    )
+
+    return Response({"status": "ok", "id": search.id})
 
 @api_view(['GET'])
 def search_history(request):
